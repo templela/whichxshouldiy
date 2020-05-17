@@ -1,6 +1,6 @@
 import jikan from 'jikants';
 //https://github.com/Julien-Broyard/jikants
-import fs from 'fs';
+import * as fs from 'fs';
 
 
 // const z = jikan.User.animeList('ztary')
@@ -53,7 +53,7 @@ const animelist = <AnimeList>JSON.parse(animelistFile.toString());
 //     console.log('coudln\'t write! see:' + err);
 // }));
 
-const allAnimeFile = fs.readFileSync('MegaAnimeList.json');
+const allAnimeFile = fs.readFileSync('ref/MegaAnimeList.json');
 const allAnime = <MegaList>JSON.parse(allAnimeFile.toString());
 const animedict: animeDict = {};
 
