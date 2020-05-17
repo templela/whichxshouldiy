@@ -6,27 +6,56 @@ import { AnimeList } from "jikants/dist/src/interfaces/user/AnimeList";
 import { getExcel } from './anime/anime-list.service';
 import { getAnimeListByUsername, getMegaList } from './anime/anime-api.service';
 import { db } from './db/db.service';
+import * as express from 'express';
 
 const mongodb = new db();
 
-async function main () {
 
-    // const username = 'ztary';
-    // const user = {
-    //     name: username,
-    //     anime: await getAnimeListByUsername('ztary'),
-    // }
-    // mongodb.insertUser(username);
-    // mongodb.deleteUser(username);
+var app = express();
 
-    const user = await mongodb.getUser('ztary');
-    console.log(user);
+app.get('/users/', (req, res, next) => {
 
-    if (user) {
-        const allAnime = await getMegaList(user.anime);
-        getExcel(allAnime, user.anime);
-    }
+  next();
+});
+
+app.get('/users/:username', async (req, res, next) => {
+
+  const username = req.params.username;
+
+  // const user = {
+  //     name: username,
+  //     anime: await getAnimeListByUsername(username),
+  // }
+  // mongodb.insertUser(username);
+  // mongodb.deleteUser(username);
+
+  const user = await mongodb.getUser(username);
+  console.log(user);
+
+  if (user) {
+    const allAnime = await getMegaList(user.anime);
+    const excel = getExcel(allAnime, user.anime);
+    res.status(200);
+    res.set('content-type', 'application/json')
+    res.send(allAnime);
+  } else {
+    res.status(404);
+    res.send('Cannot find user');
+  }
+  next();
+});
+
+
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.raw({limit: '100mb'}));
+// app.use(bodyParser.json());
+
+const config = {
+  PORT: 8080
 }
 
-main();
-export {};
+var server = app.listen(config.PORT, () => {
+  console.log(`Listening on port ${config.PORT}`);
+
+});
+

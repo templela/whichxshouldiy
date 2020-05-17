@@ -2,9 +2,9 @@ import { MegaList } from "./anime-list.service.spec";
 import { AnimeList } from "jikants/dist/src/interfaces/user/AnimeList";
 
 
-export function getExcel (allAnime: MegaList, animelist: AnimeList) {
+export function getExcel (allAnime: MegaList, animelist: AnimeList): string {
 
-
+  let excel = '';
   const wstat = ['0_Zero', 'Watching', 'Completed', 'On Hold', 'Dropped', '5_?', 'Plan to Watch'];
   for (const anime of animelist.anime) {
       let id = anime.mal_id;
@@ -29,6 +29,7 @@ export function getExcel (allAnime: MegaList, animelist: AnimeList) {
 
       // let year = allAnime[id].aired.from;
       const sep = '\t';
-      console.log(`${id}${sep}${status}${sep}${etitle}${sep}${title}${sep}${studio}${sep}${type}${sep}${eps}${sep}${score}${sep}${mem}${sep}${rating}${sep}${year}${sep}${time}`);
+      excel += `${id}${sep}${status}${sep}${etitle}${sep}${title}${sep}${studio}${sep}${type}${sep}${eps}${sep}${score}${sep}${mem}${sep}${rating}${sep}${year}${sep}${time}\n`;
   }
+  return(excel);
 }
