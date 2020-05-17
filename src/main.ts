@@ -8,19 +8,25 @@ import { getAnimeListByUsername, getMegaList } from './anime/anime-api.service';
 import { db } from './db/db.service';
 
 const mongodb = new db();
-mongodb.insertDocuments('');
 
-// getAnimeListByUsername('ztary');
+async function main () {
 
-const animelistFile = fs.readFileSync('Animelist.json');
-const animelist = <AnimeList>JSON.parse(animelistFile.toString());
+    // const username = 'ztary';
+    // const user = {
+    //     name: username,
+    //     anime: await getAnimeListByUsername('ztary'),
+    // }
+    // mongodb.insertUser(username);
+    // mongodb.deleteUser(username);
 
-// getMegaList(animelist);
+    const user = await mongodb.getUser('ztary');
+    console.log(user);
 
+    if (user) {
+        const allAnime = await getMegaList(user.anime);
+        getExcel(allAnime, user.anime);
+    }
+}
 
-const allAnimeFile = fs.readFileSync('ref/MegaAnimeList.json');
-const allAnime = <MegaList>JSON.parse(allAnimeFile.toString());
-
-// getExcel(allAnime, animelist);
-
+main();
 export {};

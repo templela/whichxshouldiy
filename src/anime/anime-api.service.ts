@@ -1,6 +1,7 @@
 import jikan from 'jikants';
 import { AnimeList } from 'jikants/dist/src/interfaces/user/AnimeList';
 import { MegaList } from './anime-list.service.spec';
+import { db } from '../db/db.service';
 
 
 export async function getAnimeListByUsername( username: string ) {
@@ -24,7 +25,8 @@ export async function getMegaList(animelist: AnimeList) {
   let i = 0;
 
   for (const animei of animelist.anime) {
-    const animeById = await jikan.Anime.byId(animei.mal_id);
+    const animeById = await getAnime(animei.mal_id);
+    // const animeById = await jikan.Anime.byId(animei.mal_id);
     if (animeById) {
       totalAnimeList[animei.mal_id] = animeById;
     } else {
@@ -36,8 +38,8 @@ export async function getMegaList(animelist: AnimeList) {
     i += 1;
   }
 
-  console.log('Completed:' + JSON.stringify(totalAnimeList));
-  console.log('#:' + Object.keys(totalAnimeList));
+  // console.log('Completed:' + JSON.stringify(totalAnimeList));
+  console.log('Completed Ids : [' + Object.keys(totalAnimeList) + ']');
 
 
   // fs.writeFileSync('MegaAnimeList.json', JSON.stringify(totalAnimeList, null, 2));
@@ -48,4 +50,23 @@ export async function getMegaList(animelist: AnimeList) {
 
   return(totalAnimeList);
 
+}
+
+export async function getAnime(mal_id: number) {
+
+  const mongodb = new db();
+  const animeDB = await mongodb.getAnime(mal_id);
+  if (!animeDB) {
+    console.log(`DB miss on ${mal_id}`);
+    const animeById = await jikan.Anime.byId(mal_id);
+    if (animeById) {
+      mongodb.insertAnime(animeById);
+      return animeById;
+    } else {
+      console.log(`Couldn't find anime in Jikan`);
+      // throw();
+    }
+  } else {
+    return animeDB;
+  }
 }
