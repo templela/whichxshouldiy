@@ -10,6 +10,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { CdkTableModule } from '@angular/cdk/table';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +24,7 @@ import { CdkTableModule } from '@angular/cdk/table';
     MatTableModule,
     MatSortModule,
     CdkTableModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

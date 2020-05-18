@@ -3,16 +3,21 @@
 import * as fs from 'fs';
 import { MegaList } from './anime/anime-list.service.spec';
 import { AnimeList } from "jikants/dist/src/interfaces/user/AnimeList";
-import { getExcel } from './anime/anime-list.service';
+import { getExcel, getList } from './anime/anime-list.service';
 import { getAnimeListByUsername, getMegaList } from './anime/anime-api.service';
 import { db } from './db/db.service';
 import * as express from 'express';
 import path = require('path');
 
+import * as cors from 'cors';
+
+
 const mongodb = new db();
 
 
 var app = express();
+
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../../client/dist/client/index.html'));
@@ -40,10 +45,13 @@ app.get('/users/:username', async (req, res, next) => {
 
   if (user) {
     const allAnime = await getMegaList(user.anime);
-    const excel = getExcel(allAnime, user.anime);
+    // const excel = getExcel(allAnime, user.anime);
+    const animeListList = getList(allAnime, user.anime);
     res.status(200);
     res.set('content-type', 'application/json')
-    res.send(allAnime);
+
+    // res.send(excel);
+    res.send(user.anime.anime);
   } else {
     res.status(404);
     res.send('Cannot find user');
