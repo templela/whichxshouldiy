@@ -51,14 +51,15 @@ export function getCustomList (allAnime: MegaList, animelist: AnimeList): Custom
 
   for (const anime of animelist.anime) {
     const id = anime.mal_id;
-    all_durations.push(allAnime[id].episodes);
+    const time = durationToMinutes(allAnime[id].duration, allAnime[id].episodes);
+    all_durations.push(time);
     all_scores  .push(allAnime[id].score);
     all_members .push(allAnime[id].members);
   }
 
-  const sorted_durations  = all_durations.sort();
-  const sorted_scores     = all_scores.sort();
-  const sorted_members    = all_members.sort();
+  const sorted_durations  = all_durations.sort((a,b)=>a-b);
+  const sorted_scores     = all_scores.sort((a,b)=>b-a);
+  const sorted_members    = all_members.sort((a,b)=>a-b);
 
   for (const anime of animelist.anime) {
     const id = anime.mal_id;
@@ -74,9 +75,9 @@ export function getCustomList (allAnime: MegaList, animelist: AnimeList): Custom
       year:             new Date(allAnime[id].aired.from).getFullYear().toString(),
       duration_minutes: time,
 
-      ranking_duration: sorted_durations.indexOf(time),
-      ranking_score:    sorted_scores.indexOf(allAnime[id].score),
-      ranking_members:  sorted_members.indexOf(allAnime[id].members),
+      ranking_duration: sorted_durations.indexOf(time) + 1,
+      ranking_score:    sorted_scores.indexOf(allAnime[id].score) + 1,
+      ranking_members:  sorted_members.indexOf(allAnime[id].members) + 1,
     };
 
 
