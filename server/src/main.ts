@@ -7,16 +7,22 @@ import { getExcel } from './anime/anime-list.service';
 import { getAnimeListByUsername, getMegaList } from './anime/anime-api.service';
 import { db } from './db/db.service';
 import * as express from 'express';
+import path = require('path');
 
 const mongodb = new db();
 
 
 var app = express();
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../whichxshouldiy-fe/dist/index.html'));
+});
+
 app.get('/users/', (req, res, next) => {
 
   next();
 });
+
 
 app.get('/users/:username', async (req, res, next) => {
 
