@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AnimelistComponent } from './animelist/animelist.component';
+import { AnimelistCustomComponent } from './animelistcustom/animelistcustom.component';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
@@ -15,7 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    AnimelistComponent
+    AnimelistComponent,
+    AnimelistCustomComponent
   ],
   imports: [
     BrowserModule,

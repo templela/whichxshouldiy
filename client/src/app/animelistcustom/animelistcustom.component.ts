@@ -4,20 +4,21 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { HttpClient } from '@angular/common/http';
 import { AnimeList } from '../../../../server/node_modules/jikants/dist/src/interfaces/user/AnimeList';
+import { CustomAnime } from '../../../../server/src/anime/anime-list.service.spec'
 
 @Component({
-  selector: 'app-animelist',
-  templateUrl: './animelist.component.html',
-  styleUrls: ['./animelist.component.css']
+  selector: 'app-animelistcustom',
+  templateUrl: './animelistcustom.component.html',
+  styleUrls: ['./animelistcustom.component.css']
 })
-export class AnimelistComponent implements OnInit {
+export class AnimelistCustomComponent implements OnInit {
 
-  displayedColumns: string[] = ['mal_id', 'title', 'total_episodes', 'watching_status'];
+  displayedColumns: string[] = ["mal_id", "watching_status_plain", "title_english", "studio", "type", "total_episodes", "duration_minutes", "ranking_duration", "score", "ranking_score", "members", "ranking_members", "year"];
   // animelist = new MatTableDataSource(DEFAULT_DATA);
-  animelistRAW: AnimeList[];
-  animelist: MatTableDataSource<AnimeList>;
+  animelistRAW: CustomAnime[];
+  animelist: MatTableDataSource<CustomAnime>;
 
-  url = 'http://localhost:8080/users/ztary/list';
+  url = 'http://localhost:8080/users/ztary/customlist';
 
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
@@ -34,13 +35,13 @@ export class AnimelistComponent implements OnInit {
   }
 
   async getAnimeList() {
-    return new Promise<AnimeList[]>(async (resolve, reject) => {
+    return new Promise<CustomAnime[]>(async (resolve, reject) => {
 
     await this.http
       .get(this.url)
       .subscribe(resp => {
         console.log(resp);
-        resolve(resp as AnimeList[]);
+        resolve(resp as CustomAnime[]);
       });
 
     })
