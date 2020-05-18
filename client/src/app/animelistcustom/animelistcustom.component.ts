@@ -46,4 +46,9 @@ export class AnimelistCustomComponent implements OnInit {
 
     })
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.animelist.filter = filterValue.trim().toLowerCase();
+  }
 }

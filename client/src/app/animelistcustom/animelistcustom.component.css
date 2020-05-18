@@ -5,3 +5,12 @@ table {
 th.mat-sort-header-sorted {
   color: black;
 }
+
+.rank {
+  color: pink;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}

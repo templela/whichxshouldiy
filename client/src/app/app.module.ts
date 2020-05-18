@@ -10,8 +10,11 @@ import { AnimelistCustomComponent } from './animelistcustom/animelistcustom.comp
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { CdkTableModule } from '@angular/cdk/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -26,6 +29,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatTableModule,
     MatSortModule,
     CdkTableModule,
+    MatFormFieldModule,
+    MatInputModule,
     HttpClientModule,
   ],
   providers: [],
