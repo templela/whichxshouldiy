@@ -12,6 +12,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -31,6 +32,7 @@ import { HttpClientModule } from '@angular/common/http';
     CdkTableModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSliderModule,
     HttpClientModule,
   ],
   providers: [],

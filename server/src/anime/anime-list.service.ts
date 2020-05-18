@@ -78,6 +78,8 @@ export function getCustomList (allAnime: MegaList, animelist: AnimeList): Custom
       ranking_duration: sorted_durations.indexOf(time) + 1,
       ranking_score:    sorted_scores.indexOf(allAnime[id].score) + 1,
       ranking_members:  sorted_members.indexOf(allAnime[id].members) + 1,
+
+      rank: 0,
     };
 
 

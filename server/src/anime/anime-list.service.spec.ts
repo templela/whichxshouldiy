@@ -18,6 +18,8 @@ export interface CustomAnime extends Anime {
   ranking_duration: number;
   ranking_score: number;
   ranking_members: number;
+
+  rank: number;
 }
 
 

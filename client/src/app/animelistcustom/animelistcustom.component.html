@@ -1,9 +1,38 @@
 
-<mat-form-field>
-<!-- <mat-form-field appearance="outline"> -->
+<mat-form-field appearance="outline">
   <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Trigger">
 </mat-form-field>
+<!--
+<mat-form-field>
+  <mat-label>Want a quick show?</mat-label>
+  <input matInput (keyup)="setTimeRank($event)" placeholder="1-10">
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Indie or Foundational? (1/10)</mat-label>
+  <input matInput (keyup)="setMembersRank($event)" placeholder="1-10">
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Acclaimed by MAL?</mat-label>
+  <input matInput (keyup)="setScoreRank($event)" placeholder="1-10">
+</mat-form-field> -->
+<span class="slider">
+  Short
+    <mat-slider min="1" max="100" step="1" (input)="setTimeRank($event)">nice </mat-slider>
+  Long
+</span>
+&emsp&emsp&emsp
+<span class="slider">
+  Indie
+    <mat-slider min="1" max="100" step="1" (input)="setMembersRank($event)">nice </mat-slider>
+  Mainstream
+</span>
+&emsp&emsp&emsp
+<span class="slider">
+  Low MAL Score
+    <mat-slider min="1" max="100" step="1" (input)="setScoreRank($event)">nice </mat-slider>
+  High MAL Score
+</span>
 
 <table mat-table [dataSource]="animelist" matSort class="mat-elevation-z8">
   <ng-container matColumnDef="mal_id">
@@ -69,6 +98,11 @@
   <ng-container matColumnDef="year">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Year </th>
     <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="rank">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Watch Score </th>
+    <td mat-cell *matCellDef="let element"> {{element.rank}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
