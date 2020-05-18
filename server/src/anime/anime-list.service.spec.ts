@@ -1,7 +1,6 @@
 
 import { AnimeById } from "jikants/dist/src/interfaces/anime/ById";
 import { AnimeList } from "jikants/dist/src/interfaces/user/AnimeList";
-import { Anime } from "jikants/dist/src/interfaces/genre/Genre";
 
 export interface MegaList {
   [mal_id: string]: AnimeById;
@@ -16,7 +15,7 @@ export interface CustomAnime extends Anime {
   year: string;
   duration_minutes: number;
 
-  ranking_episodes: number;
+  ranking_duration: number;
   ranking_score: number;
   ranking_members: number;
 }

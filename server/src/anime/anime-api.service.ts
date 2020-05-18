@@ -5,17 +5,14 @@ import { db } from '../db/db.service';
 
 
 export async function getAnimeListByUsername( username: string ) {
-
-  const animeList = await jikan.User.animeList(username);
-
-  // fs.open('Animelist.json', 'w+', (err, fd) => {
-  //     fs.write(fd, JSON.stringify(b, null, 2), () =>
-  //     {
-  //         console.log('written animelist.json');
-  //     });
-  // })
-
-  return(animeList);
+  return new Promise<AnimeList>(async (resolve, reject) => {
+    const animeList = await jikan.User.animeList(username);
+    if (animeList) {
+      resolve(animeList);
+    } else {
+      reject('Couldn\'t build an Animelist');
+    }
+  });
 }
 
 export async function getMegaList(animelist: AnimeList) {

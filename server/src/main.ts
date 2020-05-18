@@ -27,32 +27,43 @@ app.get('/users/', (req, res, next) => {
 
   next();
 });
+app.get('/users/:username/new', async (req, res, next) => {
+  const username = req.params.username;
+  const user = {
+      name: username,
+      anime: await getAnimeListByUsername(username),
+  }
+
+  mongodb.insertUser(user);
+  // mongodb.deleteUser(username);
+});
 
 app.get('/users/:username/list', async (req, res, next) => {
-
   const username = req.params.username;
-
-  // const user = {
-  //     name: username,
-  //     anime: await getAnimeListByUsername(username),
-  // }
-  // mongodb.insertUser(username);
-  // mongodb.deleteUser(username);
-
   const user = await mongodb.getUser(username);
-  console.log(user);
+
+  if (user) {
+    res.status(200);
+    res.set('content-type', 'application/json');
+    res.send(user.anime.anime);
+  } else {
+    res.status(404);
+    res.send('Cannot find user');
+  }
+  next();
+});
+
+app.get('/users/:username/customlist', async (req, res, next) => {
+  const username = req.params.username;
+  const user = await mongodb.getUser(username);
 
   if (user) {
     const allAnime = await getMegaList(user.anime);
-    // const excel = getExcel(allAnime, user.anime);
-    // const animeListList = getList(allAnime, user.anime);
     const customList = getCustomList(allAnime, user.anime);
-    console.log(customList);
+    // console.log(customList);
     res.status(200);
     res.set('content-type', 'application/json')
-
-    // res.send(excel);
-    res.send(user.anime.anime);
+    res.send(customList);
   } else {
     res.status(404);
     res.send('Cannot find user');
