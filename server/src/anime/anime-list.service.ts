@@ -1,6 +1,7 @@
-import { MegaList } from "./anime-list.service.spec";
+import { MegaList, CustomAnimeList, CustomAnime } from "./anime-list.service.spec";
 import { AnimeList } from "jikants/dist/src/interfaces/user/AnimeList";
 
+const wstat = ['0_Zero', 'Watching', 'Completed', 'On Hold', 'Dropped', '5_?', 'Plan to Watch'];
 
 export function getExcel (allAnime: MegaList, animelist: AnimeList): string {
 
@@ -17,7 +18,7 @@ export function getExcel (allAnime: MegaList, animelist: AnimeList): string {
 export function getList (allAnime: MegaList, animelist: AnimeList): string[][] {
   let list = [];
 
-  const wstat = ['0_Zero', 'Watching', 'Completed', 'On Hold', 'Dropped', '5_?', 'Plan to Watch'];
+
   for (const anime of animelist.anime) {
       let id = anime.mal_id.toString();
 
@@ -31,13 +32,7 @@ export function getList (allAnime: MegaList, animelist: AnimeList): string[][] {
       let mem     = (allAnime[id].members || '').toString();
       let rating  = allAnime[id].rating;
       let year    = new Date(allAnime[id].aired.from).getFullYear().toString();
-
-      let dur = allAnime[id].duration;
-      let timere = /(\d+ hr)? ?(\d+ min)? ?(per ep)?/i;
-      let res = timere.exec(dur);
-      let hours = res ? (res[1] ? parseInt(res[1].replace("\D", '')): 0) : 0;
-      let mins = res ? (res[2] ? parseInt(res[2].replace("\D", '')): 0) : 0;
-      let time = (hours * 60 + mins).toString();
+      let time    = durationToMinutes(allAnime[id].duration).toString();
 
       // let year = allAnime[id].aired.from;
       const sep = '\t';
@@ -45,5 +40,56 @@ export function getList (allAnime: MegaList, animelist: AnimeList): string[][] {
       list.push([id, status, etitle, title, studio, type, eps, score, mem, rating, year, time]);
   }
   return(list);
+}
 
+export function getCustomList (allAnime: MegaList, animelist: AnimeList): CustomAnime[] {
+  const customanime = [];
+
+  const all_episodes: number[] = [];
+  const all_scores: number[] = [];
+  const all_members: number[] = [];
+
+  for (const anime of animelist.anime) {
+    const id = anime.mal_id;
+    all_episodes.push(allAnime[id].episodes);
+    all_scores  .push(allAnime[id].score);
+    all_members .push(allAnime[id].members);
+  }
+
+  const sorted_episodes = all_episodes.sort();
+  const sorted_scores   = all_scores.sort();
+  const sorted_members  = all_members.sort();
+
+  for (const anime of animelist.anime) {
+    const id = anime.mal_id;
+
+
+    let customanimelistEntry: CustomAnime = {
+      ...anime,
+      watching_status_plain: wstat[anime.watching_status],
+      title_english:    allAnime[id].title_english ? allAnime[id].title_english : allAnime[id].title,
+      studio:           allAnime[id].studios ? (allAnime[id].studios[0] ? allAnime[id].studios[0].name : 'wtf') : 'N/A',
+      score:            allAnime[id].score,
+      members:          allAnime[id].members,
+      year:             new Date(allAnime[id].aired.from).getFullYear().toString(),
+      duration_minutes: durationToMinutes(allAnime[id].duration),
+
+      ranking_episodes: sorted_episodes.indexOf(allAnime[id].episodes),
+      ranking_score:    sorted_scores.indexOf(allAnime[id].score),
+      ranking_members:  sorted_members.indexOf(allAnime[id].members),
+    };
+
+
+    customanime.push(customanimelistEntry);
+  }
+  return(customanime);
+}
+
+function durationToMinutes(duration: string): number {
+  let timere = /(\d+ hr)? ?(\d+ min)? ?(per ep)?/i;
+  let res = timere.exec(duration);
+  let hours = res ? (res[1] ? parseInt(res[1].replace("\D", '')): 0) : 0;
+  let mins = res ? (res[2] ? parseInt(res[2].replace("\D", '')): 0) : 0;
+  let time = hours * 60 + mins;
+  return time;
 }

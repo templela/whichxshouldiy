@@ -3,7 +3,7 @@
 import * as fs from 'fs';
 import { MegaList } from './anime/anime-list.service.spec';
 import { AnimeList } from "jikants/dist/src/interfaces/user/AnimeList";
-import { getExcel, getList } from './anime/anime-list.service';
+import { getExcel, getList, getCustomList } from './anime/anime-list.service';
 import { getAnimeListByUsername, getMegaList } from './anime/anime-api.service';
 import { db } from './db/db.service';
 import * as express from 'express';
@@ -28,8 +28,7 @@ app.get('/users/', (req, res, next) => {
   next();
 });
 
-
-app.get('/users/:username', async (req, res, next) => {
+app.get('/users/:username/list', async (req, res, next) => {
 
   const username = req.params.username;
 
@@ -46,7 +45,9 @@ app.get('/users/:username', async (req, res, next) => {
   if (user) {
     const allAnime = await getMegaList(user.anime);
     // const excel = getExcel(allAnime, user.anime);
-    const animeListList = getList(allAnime, user.anime);
+    // const animeListList = getList(allAnime, user.anime);
+    const customList = getCustomList(allAnime, user.anime);
+    console.log(customList);
     res.status(200);
     res.set('content-type', 'application/json')
 
