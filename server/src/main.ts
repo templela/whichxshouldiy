@@ -15,7 +15,7 @@ const mongodb = new db();
 var app = express();
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../whichxshouldiy-fe/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../../client/dist/client/index.html'));
 });
 
 app.get('/users/', (req, res, next) => {
