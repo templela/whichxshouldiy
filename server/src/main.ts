@@ -28,47 +28,67 @@ app.get('/users/', (req, res, next) => {
   next();
 });
 app.get('/users/:username/new', async (req, res, next) => {
-  const username = req.params.username;
-  const user = {
-      name: username,
-      anime: await getAnimeListByUsername(username),
-  }
+  try{
+    const username = req.params.username;
+    const user = {
+        name: username,
+        anime: await getAnimeListByUsername(username),
+    }
 
-  mongodb.insertUser(user);
-  // mongodb.deleteUser(username);
+    mongodb.insertUser(user);
+    // mongodb.deleteUser(username);
+  } catch (ex) {
+    console.log(ex);
+    console.log(`Couldn't get user: ${req.params.username}`);
+    res.status(500);
+    res.send('Error');
+  }
 });
 
 app.get('/users/:username/list', async (req, res, next) => {
-  const username = req.params.username;
-  const user = await mongodb.getUser(username);
+  try {
+    const username = req.params.username;
+    const user = await mongodb.getUser(username);
 
-  if (user) {
-    res.status(200);
-    res.set('content-type', 'application/json');
-    res.send(user.anime.anime);
-  } else {
-    res.status(404);
-    res.send('Cannot find user');
+    if (user) {
+      res.status(200);
+      res.set('content-type', 'application/json');
+      res.send(user.anime.anime);
+    } else {
+      res.status(404);
+      res.send('Cannot find user');
+    }
+    next();
+  } catch (ex) {
+    console.log(ex);
+    res.status(500);
+    res.send('Error');
   }
-  next();
 });
 
 app.get('/users/:username/customlist', async (req, res, next) => {
-  const username = req.params.username;
-  const user = await mongodb.getUser(username);
+  try {
+    const username = req.params.username;
+    const user = await mongodb.getUser(username);
 
-  if (user) {
-    const allAnime = await getMegaList(user.anime);
-    const customList = getCustomList(allAnime, user.anime);
-    // console.log(customList);
-    res.status(200);
-    res.set('content-type', 'application/json')
-    res.send(customList);
-  } else {
-    res.status(404);
-    res.send('Cannot find user');
+    if (user) {
+      const allAnime = await getMegaList(user.anime);
+      const customList = getCustomList(allAnime, user.anime);
+      // console.log(customList);
+      res.status(200);
+      res.set('content-type', 'application/json')
+      res.send(customList);
+    } else {
+      res.status(404);
+      res.send('Cannot find user');
+    }
+    next();
+  } catch (ex) {
+    console.log(ex);
+    console.log(`Couldn't get user: ${req.params.username}`);
+    res.status(500);
+    res.send('Error');
   }
-  next();
 });
 
 
