@@ -7,6 +7,7 @@ import { db } from '../db/db.service';
 export async function getAnimeListByUsername( username: string ) {
   return new Promise<AnimeList>(async (resolve, reject) => {
     const animeList = await jikan.User.animeList(username);
+
     if (animeList) {
       resolve(animeList);
     } else {

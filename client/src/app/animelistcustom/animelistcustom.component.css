@@ -22,3 +22,7 @@ input {
 .slider {
   color: white
 }
+
+mat-checkbox {
+  color: white
+}

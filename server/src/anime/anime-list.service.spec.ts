@@ -7,6 +7,7 @@ export interface MegaList {
 }
 
 export interface CustomAnime extends Anime {
+  index: number;
   watching_status_plain: string;
   title_english: string;
   studio: string;

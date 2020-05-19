@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { HttpClient } from '@angular/common/http';
@@ -15,12 +15,18 @@ import { MatSliderChange } from '@angular/material/slider';
 export class AnimelistCustomComponent implements OnInit {
   url = 'http://localhost:8080/users/ztary/customlist';
 
-  displayedColumns: string[] = ["mal_id", "watching_status_plain", "title_english", "studio", "type", "total_episodes", "duration_minutes", "ranking_duration", "score", "ranking_score", "members", "ranking_members", "year", "rank"];
+  displayedColumns: string[] = [
+    "title_english", "mal_id", "watching_status_plain",
+    "studio", "type",
+    "total_episodes", "duration_minutes",
+    "score",
+    "members",
+    "year", "rank"];
   // animelist = new MatTableDataSource(DEFAULT_DATA);
   animelistRAW: CustomAnime[];
   animelist: MatTableDataSource<CustomAnime>;
   filter: string;
-
+  fastrank: boolean = true;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -33,11 +39,11 @@ export class AnimelistCustomComponent implements OnInit {
   async ngOnInit() {
 
     this.animelistRAW = await this.getAnimeList();
+    console.log(this.animelistRAW[0]);
     this.animelist = new MatTableDataSource(this.animelistRAW);
     this.animelist.sort = this.sort;
     this.animelist.filter = this.filter;
     this.refreshAnimelist();
-
   }
 
   async getAnimeList() {
@@ -53,18 +59,27 @@ export class AnimelistCustomComponent implements OnInit {
     })
   }
 
+  forceSorted() {
+    if (this.fastrank && this.animelist.filteredData.length > 30) {
+      this.sort.active = 'title_english';
+    }
+  }
+
   setTimeRankWeight(event: MatSliderChange) {
     this.timeRankWeight = event.value;
+    this.forceSorted();
     this.refreshAnimelist();
   }
 
   setMembersRankWeight(event: MatSliderChange) {
     this.membersRankWeight = event.value;
+    this.forceSorted();
     this.refreshAnimelist();
   }
 
   setScoreRankWeight(event: MatSliderChange) {
     this.scoreRankWeight = event.value;
+    this.forceSorted();
     this.refreshAnimelist();
   }
 
@@ -89,7 +104,7 @@ export class AnimelistCustomComponent implements OnInit {
       anime.rank = filteredrank.indexOf(anime.rank) + 1;
     });
 
-    this.animelist.sort = this.sort
+    // this.animelist.sort = this.sort
   }
 
   applyFilter(event: Event) {
@@ -133,7 +148,7 @@ export class AnimelistCustomComponent implements OnInit {
 
     // Prioritizes values
     //    1  gives a positive linear distribution
-    //    5  gives a flat linear distibution (i.e. NOT AFFTECTIVE)
+    //    5  gives a flat linear distibution (i.e. DOESNT EFFECT OVERALL RANK)
     //    10 would a negative linear distribution
     function lin(ranking: number, weight: number) {
       return Math.floor((1 - weight/5) * ranking + length * (weight/10));
@@ -145,7 +160,7 @@ export class AnimelistCustomComponent implements OnInit {
 
     const rank = (
       func(anime.ranking_duration, this.timeRankWeight) +
-      func(anime.ranking_score,    10 - this.scoreRankWeight) + //This is because we want a 10 to behave inversely (10 gives lower ranks)
+      func(anime.ranking_score,    10 - this.scoreRankWeight) + //This is because we want a 10 to behave inversely (10 gives lower ranks higher important)
       func(anime.ranking_members,  this.membersRankWeight)
     );
 

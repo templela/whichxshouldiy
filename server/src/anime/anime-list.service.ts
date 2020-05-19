@@ -61,12 +61,15 @@ export function getCustomList (allAnime: MegaList, animelist: AnimeList): Custom
   const sorted_scores     = all_scores.sort((a,b)=>b-a);
   const sorted_members    = all_members.sort((a,b)=>a-b);
 
+
+  let index = 0;
   for (const anime of animelist.anime) {
     const id = anime.mal_id;
 
     const time = durationToMinutes(allAnime[id].duration, allAnime[id].episodes);
     let customanimelistEntry: CustomAnime = {
       ...anime,
+      index: index,
       watching_status_plain: wstat[anime.watching_status],
       title_english:    allAnime[id].title_english ? allAnime[id].title_english : allAnime[id].title,
       studio:           allAnime[id].studios ? (allAnime[id].studios[0] ? allAnime[id].studios[0].name : 'wtf') : 'N/A',
@@ -81,7 +84,7 @@ export function getCustomList (allAnime: MegaList, animelist: AnimeList): Custom
 
       rank: 0,
     };
-
+    index += 1;
 
     customanime.push(customanimelistEntry);
   }
