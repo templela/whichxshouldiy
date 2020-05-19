@@ -18,19 +18,19 @@
 </mat-form-field> -->
 <span class="slider">
   Short
-    <mat-slider min="1" max="100" step="1" (input)="setTimeRank($event)">nice </mat-slider>
+    <mat-slider min="0" max="10" step="1" tickInterval="5" value="3" (input)="setTimeRankWeight($event)">nice </mat-slider>
   Long
 </span>
-&emsp&emsp&emsp
+&emsp&emsp
 <span class="slider">
   Indie
-    <mat-slider min="1" max="100" step="1" (input)="setMembersRank($event)">nice </mat-slider>
+    <mat-slider min="0" max="10" step="1" tickInterval="5" value="3" (input)="setMembersRankWeight($event)">nice </mat-slider>
   Mainstream
 </span>
-&emsp&emsp&emsp
+&emsp&emsp
 <span class="slider">
-  Low MAL Score
-    <mat-slider min="1" max="100" step="1" (input)="setScoreRank($event)">nice </mat-slider>
+  Score is Fake
+    <mat-slider min="0" max="10" step="1" tickInterval="5" value="7" (input)="setScoreRankWeight($event)">nice </mat-slider>
   High MAL Score
 </span>
 
