@@ -9,13 +9,15 @@ export class db {
   // Connection URL
   url = 'mongodb://localhost:27017/myproject';
   // mongodb?: mongodb.MongoClient;
+  dbclient: mongodb.MongoClient | undefined;
 
   constructor() {
+
   }
 
   public async getDB() {
-    const mongo = await MongoClient.connect(this.url);
-    const db = mongo.db();
+    this.dbclient = await MongoClient.connect(this.url);
+    const db = this.dbclient.db();
     const admin = db.admin();
     // console.log(await admin.listDatabases());
 
@@ -53,7 +55,7 @@ export class db {
     } catch (ex) {
       console.log('Issue Inserting: ' + ex);
     }
-    // db.close();
+    if (this.dbclient) this.dbclient.close();
   }
 
   async insertUser(user: User) {
@@ -72,7 +74,7 @@ export class db {
     } catch (ex) {
       console.log('Issue Inserting: ' + ex);
     }
-    // db.close();
+    if (this.dbclient) this.dbclient.close();
   }
 
   async deleteUser(user: string) {
@@ -84,8 +86,7 @@ export class db {
     } catch (ex) {
       console.log('Issue Deleting: ' + ex);
     }
-
-    // db.close();
+    if (this.dbclient) this.dbclient.close();
   }
 
   async getUser(user: string) {
@@ -105,8 +106,7 @@ export class db {
     } catch (ex) {
       console.log(ex);
     }
-
-    // db.close();
+    if (this.dbclient) this.dbclient.close();
   }
 
 
@@ -127,7 +127,7 @@ export class db {
     } catch (ex) {
       console.log('Issue Inserting: ' + ex);
     }
-    // db.close();
+    if (this.dbclient) this.dbclient.close();
   }
 
   async deleteAnime(id: number) {
@@ -139,8 +139,7 @@ export class db {
     } catch (ex) {
       console.log('Issue Deleting: ' + ex);
     }
-
-    // db.close();
+    if (this.dbclient) this.dbclient.close();
   }
 
   async getAnime(id: number) {
@@ -160,8 +159,7 @@ export class db {
     } catch (ex) {
       console.log(ex);
     }
-
-    // db.close();
+    if (this.dbclient) this.dbclient.close();
   }
 
 
